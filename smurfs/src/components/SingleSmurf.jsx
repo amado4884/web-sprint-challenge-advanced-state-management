@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 
 const SmurfCard = styled.div`
   align-self: stretch;
@@ -13,24 +13,25 @@ const SmurfCard = styled.div`
   margin: 1rem;
 `;
 
-const Smurf = ({ smurf }) => {
+const SingleSmurf = ({ smurfs }) => {
+  const { params } = useRouteMatch();
+  console.log(useRouteMatch());
+  const smurf = smurfs.filter((sm) => sm.id === Number(params.id))[0];
   return (
     <SmurfCard>
       <h3>
-        <NavLink to={`smurfs/${smurf.id}`}>
-          {smurf.name} - #{smurf.id}
-        </NavLink>
+        {smurf && smurf.name} - #{smurf && smurf.id}
       </h3>
       <p>
         Age:
-        {smurf.age}
+        {smurf && smurf.age}
       </p>
       <p>
         Height:
-        {smurf.height}
+        {smurf && smurf.height}
       </p>
     </SmurfCard>
   );
 };
 
-export default Smurf;
+export default SingleSmurf;

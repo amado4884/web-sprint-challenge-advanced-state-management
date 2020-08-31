@@ -6,6 +6,7 @@ import Smurf from "./Smurf";
 import { fetchSmurf } from "../actions";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import Form from "./Form";
+import SingleSmurf from "./SingleSmurf";
 
 const SmurfList = styled.div`
   display: flex;
@@ -33,8 +34,8 @@ class App extends Component {
               ))}
             </SmurfList>
           </Route>
-          <Route path="smurfs/:id">
-            <Smurf smurf={this.props.list.filter((sm) => sm.id === match.params.id)[0]} />
+          <Route path="/smurfs/:id">
+            <SingleSmurf smurfs={this.props.list} />
           </Route>
         </Switch>
       </Router>
