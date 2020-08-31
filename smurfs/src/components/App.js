@@ -1,16 +1,51 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 import "./App.css";
+import { connect } from "react-redux";
+import Smurf from "./Smurf";
+import { fetchSmurf } from "../actions";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import Form from "./Form";
+import SingleSmurf from "./SingleSmurf";
+
+const SmurfList = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 80rem;
+  margin: auto;
+`;
+
 class App extends Component {
+  componentDidMount() {
+    this.props.fetchSmurfs();
+  }
   render() {
     return (
-      <div className="App">
-        <h1>SMURFS! W/Redux</h1>
-        <div>Welcome to your state management version of Smurfs!</div>
-        <div>Start inside of your `src/index.js` file!</div>
-        <div>Have fun!</div>
-      </div>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Form />
+            <SmurfList>
+              {this.props.list.map((sm) => (
+                <Smurf key={Date.now()} smurf={sm} />
+              ))}
+            </SmurfList>
+          </Route>
+          <Route path="/smurfs/:id">
+            <SingleSmurf smurfs={this.props.list} />
+          </Route>
+        </Switch>
+      </Router>
     );
   }
 }
-
-export default App;
+const mapStateToProps = (state) => {
+  return { list: state.list };
+};
+const mapDispatchToProps = (dispatch) => {
+  return { fetchSmurfs: () => dispatch(fetchSmurf()) };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(App);
